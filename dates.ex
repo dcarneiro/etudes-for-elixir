@@ -7,6 +7,21 @@ defmodule Dates do
     [y, m, d] = date_parts(date)
     days_per_month = [31,28,31,30,31,30,31,31,30,31,30,31]
     result = month_total(m, days_per_month, 0) + d
+    handle_leap_year(result, y, m)
+  end
+
+  def other_julian(date) do
+    [y, m, d] = date_parts(date)
+    {relevant_months, _ } = Enum.split(days_per_month, m - 1)
+    result = List.foldl(relevant_months, 0, fn(x, acc) -> x + acc end) + d
+    handle_leap_year(result, y, m)
+  end
+
+  defp days_per_month do
+    [31,28,31,30,31,30,31,31,30,31,30,31]
+  end
+
+  defp handle_leap_year(result, y, m) do
     cond do
       is_leap_year(y) and m > 2 -> result + 1
       true -> result
