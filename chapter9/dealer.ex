@@ -55,10 +55,13 @@ defmodule Dealer do
     cond do
       cards1 == [] and cards2 == [] ->
         IO.puts("Draw")
+        endgame(players)
       cards1 == [] ->
         IO.puts("Player 2 wins")
+        endgame(players)
       cards2 == [] ->
         IO.puts("Player 1 wins")
+        endgame(players)
       true ->
         new_pile = evaluate(players, cards1, cards2, pile)
         play(players, :pre_battle, [], [], 0, new_pile)
@@ -99,6 +102,10 @@ defmodule Dealer do
   def request_cards([p1, p2], n) do
     send(p1, {:give, n, self()})
     send(p2, {:give, n, self()})
+  end
+
+  defp endgame(players) do
+    Enum.each(players, fn(x) -> send(x, :game_over) end)
   end
 
   @doc """
