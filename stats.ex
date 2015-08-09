@@ -1,7 +1,11 @@
 defmodule Stats do
   def minimum(list) do
-    [head|tail] = list
-    minimum(tail, head)
+    try do
+      [head|tail] = list
+      minimum(tail, head)
+    rescue
+      err -> err
+    end
   end
 
   defp minimum([], result) do
@@ -41,17 +45,25 @@ defmodule Stats do
   Returns the mean of a list of numbers.
   """
   def mean(list) do
-    sum = List.foldl(list, 0, fn (x, acc) -> x + acc end)
-    sum / Enum.count(list)
+    try do
+      sum = List.foldl(list, 0, fn (x, acc) -> x + acc end)
+      sum / Enum.count(list)
+    rescue
+      err -> err
+    end
   end
 
   @doc """
   Returns the standard deviation of the list
   """
   def stdv(list) do
-    sum = List.foldl(list, 0, fn (x, acc) -> x + acc end)
-    sum_of_squares = List.foldl(list, 0, fn (x, acc) -> x * x + acc end)
-    n = Enum.count(list)
-    :math.sqrt((n * sum_of_squares - sum * sum)/(n * (n - 1)))
+    try do
+      sum = List.foldl(list, 0, fn (x, acc) -> x + acc end)
+      sum_of_squares = List.foldl(list, 0, fn (x, acc) -> x * x + acc end)
+      n = Enum.count(list)
+      :math.sqrt((n * sum_of_squares - sum * sum)/(n * (n - 1)))
+    rescue
+      err -> err
+    end
   end
 end
